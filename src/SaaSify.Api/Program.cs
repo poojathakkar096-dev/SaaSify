@@ -1,4 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using SaaSify.Infrastructure.Persistences;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Register AppDbContext with SQL Server
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        b => b.MigrationsAssembly("SaaSify.Infrastructure")
+    ));
 
 // Add services to the container.
 
