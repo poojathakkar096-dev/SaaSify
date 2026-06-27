@@ -8,5 +8,6 @@ namespace SaaSify.Application.Interface
         Task<IEnumerable<Customer>> GetAllByTenantAsync(Guid tenantId);
         Task<Customer?> GetByIdAsync(Guid id, Guid tenantId);
         Task<bool> DeleteAsync(Guid id, Guid tenantId);
+        Task<int> CountByTenantAsync(Guid tenantId);
     }
 }

@@ -16,6 +16,7 @@
 
 	<ItemGroup>
 		<Folder Include="Database\02_StoredProcedures\Customers\" />
+		<Folder Include="Database\02_StoredProcedures\Subscription\" />
 		<Folder Include="Database\02_StoredProcedures\Users\" />
 		<Folder Include="Database\02_StoredProcedures\Tenants\" />
 	</ItemGroup>

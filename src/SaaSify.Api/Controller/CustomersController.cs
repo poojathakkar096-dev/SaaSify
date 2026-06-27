@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SaaSify.Application.DTOs;
 using SaaSify.Application.Interface.Services;
@@ -43,7 +42,7 @@ namespace SaaSify.Api.Controller
         }
 
 
-      
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)

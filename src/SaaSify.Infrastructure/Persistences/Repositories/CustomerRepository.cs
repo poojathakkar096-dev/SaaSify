@@ -62,6 +62,20 @@ namespace SaaSify.Infrastructure.Persistences.Repositories
             );
         }
 
+        public async Task<int> CountByTenantAsync(Guid tenantId)
+        {
+            using var connection = _context.CreateConnection();
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@TenantId", tenantId);
+
+            return await connection.QuerySingleAsync<int>(
+                "sp_GetCustomerCountByTenant",
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
+        }
+
         public async Task<bool> DeleteAsync(Guid id, Guid tenantId)
         {
             using var connection = _context.CreateConnection();
