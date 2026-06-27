@@ -1,12 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SaaSify.Api.Middleware;
 using SaaSify.Application.Interface;
 using SaaSify.Application.Interface.Services;
 using SaaSify.Infrastructure.Persistences;
 using SaaSify.Infrastructure.Persistences.Repositories;
 using SaaSify.Infrastructure.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,10 +23,16 @@ builder.Services.AddSingleton<DapperContext>();
 
 builder.Services.AddScoped<ITenantRepository, TenantRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+
 
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+builder.Services.AddScoped<ITenantContext, TenantContext>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+
 
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
@@ -44,6 +51,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             )
         };
     });
+
 
 builder.Services.AddAuthorization();
 
@@ -94,7 +102,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapControllers();
 app.UseHttpsRedirection();
+
+app.UseAuthentication();                      
+app.UseMiddleware<TenantMiddleware>();       
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();

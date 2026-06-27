@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SaaSify.Application.Interface.Services;
 using static SaaSify.Application.DTOs.Auth;
 
@@ -6,6 +7,7 @@ namespace SaaSify.Api.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
