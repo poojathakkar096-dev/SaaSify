@@ -37,8 +37,15 @@ namespace SaaSify.Api.Controller
         [HttpPost("save")]
         public async Task<IActionResult> Save([FromBody] CustomerRequest request)
         {
-            var customer = await _customerService.SaveAsync(request);
-            return Ok(customer);
+            try
+            {
+                var customer = await _customerService.SaveAsync(request);
+                return Ok(customer);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
 

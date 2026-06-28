@@ -6,7 +6,7 @@ namespace SaaSify.Domain.Entity
     public class Subscription : BaseEntity, ITenantEntity
     {
         public Guid TenantId { get; set; }
-        public int PlanId { get; set; }
+        public Plan PlanId { get; set; }
         public string Status { get; set; } = AppConstants.SubscriptionStatus.Pending;
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -14,7 +14,7 @@ namespace SaaSify.Domain.Entity
 
     public class SubscriptionRequest
     {
-        public int PlanId { get; set; }
+        public Plan PlanId { get; set; }
     }
 
     public class SubscriptionResponse
@@ -22,7 +22,7 @@ namespace SaaSify.Domain.Entity
         public Guid Id { get; set; }
         
         public string? PlanName { get; set; }
-        public int PlanId { get; set; }
+        public Plan PlanId { get; set; }
         public string Status { get; set; } = string.Empty;
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }

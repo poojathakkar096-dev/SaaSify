@@ -1,6 +1,11 @@
 ﻿using SaaSify.Application.Interface;
+using SaaSify.Application.Interface.Repositories;
 using SaaSify.Application.Interface.Services;
+using SaaSify.Domain.Constants;
 using SaaSify.Domain.Entity;
+using SaaSify.Domain.Enums;
+using SaaSify.Infrastructure.Persistences.Repositories;
+using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using static SaaSify.Application.DTOs.Auth;
@@ -12,15 +17,18 @@ namespace SaaSify.Infrastructure.Services
         private readonly ITenantRepository _tenantRepository;
         private readonly IUserRepository _userRepository;
         private readonly IJwtTokenService _jwtTokenService;
+        private readonly ISubscriptionRepository _subscriptionRepository;
 
         public AuthService(
             ITenantRepository tenantRepository,
             IUserRepository userRepository,
-            IJwtTokenService jwtTokenService)
+            IJwtTokenService jwtTokenService,
+            ISubscriptionRepository subscriptionRepository)
         {
             _tenantRepository = tenantRepository;
             _userRepository = userRepository;
             _jwtTokenService = jwtTokenService;
+            _subscriptionRepository = subscriptionRepository;
         }
 
         public async Task<AuthResponse> SignupAsync(SignupRequest request)
@@ -36,9 +44,9 @@ namespace SaaSify.Infrastructure.Services
                 Id = Guid.NewGuid(),
                 Name = request.BusinessName,
                 Email = request.Email,
-                SubscriptionPlan = "Free",
                 IsActive = true,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                PlanId = Plan.Free
             };
 
             await _tenantRepository.CreateAsync(tenant);
@@ -57,6 +65,17 @@ namespace SaaSify.Infrastructure.Services
 
             await _userRepository.CreateAsync(user);
 
+            var subscription = new Subscription
+            {
+                Id = Guid.NewGuid(),
+                TenantId = tenant.Id,
+                PlanId = Plan.Free,
+                Status = AppConstants.SubscriptionStatus.Active,
+                StartDate = DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _subscriptionRepository.SaveAsync(subscription);
             // Generate JWT
             var token = _jwtTokenService.GenerateToken(user);
 

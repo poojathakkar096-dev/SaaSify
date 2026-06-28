@@ -20,10 +20,6 @@ namespace SaaSify.Infrastructure.Persistences.Configurations
                 .IsRequired()
                 .HasMaxLength(200);
 
-            builder.Property(t => t.SubscriptionPlan)
-                .IsRequired()
-                .HasMaxLength(50)
-                .HasDefaultValue("Free");
 
             builder.Property(t => t.IsActive)
                 .HasDefaultValue(true);

@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using SaaSify.Application.Interface;
 using SaaSify.Domain.Entity;
+using SaaSify.Domain.Enums;
 using System.Data;
 
 namespace SaaSify.Infrastructure.Persistences.Repositories
@@ -22,7 +23,7 @@ namespace SaaSify.Infrastructure.Persistences.Repositories
             parameters.Add("@Id", tenant.Id);
             parameters.Add("@Name", tenant.Name);
             parameters.Add("@Email", tenant.Email);
-            parameters.Add("@SubscriptionPlan", tenant.SubscriptionPlan);
+            parameters.Add("@PlanId", Plan.Free);
 
             return await connection.QuerySingleAsync<Tenant>(
                 "sp_CreateTenant",
